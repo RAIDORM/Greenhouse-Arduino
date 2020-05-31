@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import data, Base
 
-engine = create_engine('sqlite:///R:\\Windows\\Bureau\\Dashboard\\database.db?check_same_thread=False')
+engine = create_engine('sqlite:///R:\\Windows\\Documents\\Greenhouse-Arduino\\database.db?check_same_thread=False')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
