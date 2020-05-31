@@ -1,0 +1,13 @@
+.first{
+    padding-top: 50px;
+}
+
+.second{
+    padding-top: 50px;
+}
+
+@media screen and (max-width: 991px) {
+    .col-12{
+        padding-top: 20px;
+    }
+  }

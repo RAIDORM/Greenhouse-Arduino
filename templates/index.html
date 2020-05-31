@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBoard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='sb-admin-2.min.css') }}" />
+</head>
+<body>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <div class="container">
+      <div class="row first">
+        <div class="col-12 col-lg-3">
+          {% if status[3] == 1 %}
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ventilateur status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Activé</p>
+              {% else %}
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Ventilateur status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Désactivé</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          {% if status[2] == 1 %}
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Brumisateur status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Activé</p>
+              {% else %}
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Brumisateur status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Désactivé</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          {% if status[0] == 1 %}
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pompe status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Activé</p>
+              {% else %}
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Pompe status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Désactivé</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          {% if status[1] == 1 %}
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Volet status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Activé</p>
+              {% else %}
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Volet status :</div>
+                <p class="h5 mb-0 font-weight-bold text-gray-800">Désactivé</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row second">
+        <div class="col-lg-6 col-sm-12">
+          <div class="card card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">
+                Hygrométrie & Humidité
+              </h6>
+            </div>
+            <div class="card-body">
+              <canvas id="line-chart-pourcent"height="200rem"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <div class="card card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">
+                Température
+              </h6>
+            </div>
+            <div class="card-body">
+              <canvas id="line-chart-temp" height="200rem"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>DashBoard By Thomas Houtrique <br><strong>https://github.com/RAIDORM</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script>
+        new Chart(document.getElementById("line-chart-pourcent"), {
+  type: 'line',
+  data: {
+    labels: [{% for test in labels %}
+                "{{test}}",
+              {% endfor %}],
+    datasets: [{
+        data : [{% for humi in humidite %}
+                {{humi}},
+              {% endfor %}],
+        label: "Humidité",
+        borderColor: "#95e1d3",
+      },
+      {
+        data : [{% for hygro in hygros %}
+                {{hygro}},
+              {% endfor %}],
+        label: "Hygrométrie",
+        borderColor: "#f38181",
+      }
+    ]
+  },
+  options: {}
+});
+    </script>
+    <script>
+      new Chart(document.getElementById("line-chart-temp"), {
+type: 'line',
+data: {
+  labels: [{% for test in labels %}
+              "{{test}}",
+            {% endfor %}],
+  datasets: [{
+      data : [{% for temp in temps %}
+              {{temp}},
+            {% endfor %}],
+      label: "Température",
+      borderColor: "#95e1d3",
+    }
+  ]
+},
+options: {}
+});
+  </script>
+</body>
+</html>
